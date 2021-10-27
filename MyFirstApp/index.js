@@ -5,6 +5,7 @@ const movies = require('../collection/movies')
 app.use(express.json());
 app.listen(3000,() => console.log('La API esta levantada en el puerto 3000'));
 
+
 app.get('/movie', (req, res) => {
    
     const getMovie = valor => {
@@ -16,13 +17,11 @@ app.get('/movie', (req, res) => {
     
     let resultado = getMovie(req.query.name);
 
-    console.log('result of getMovie -> ',resultado)
-
     if(resultado.length > 0){
         res.json({ pelicula : resultado})
     } else {
         res.status(400).send('query not found');
-    }
+    };
 });
 
 app.get('/movie/:id', (req, res) => {
@@ -57,8 +56,9 @@ app.put('/movie/:id', (req, res) => {
 
 app.delete('/movie/:id', (req, res) => {
     const found = movies.some(movie => movie.id === parseInt(req.params.id));
-    console.log(found)
     if(found){
-        res.json({ msg: 'Movie deleted', movies: movies.filter(movie => movie.id !== parseInt(req.params.id))});
+        let num = req.params.id;
+        movies.splice(num, 1)
+        res.json({ msg: 'Movie deleted', movies});
     }
 });
