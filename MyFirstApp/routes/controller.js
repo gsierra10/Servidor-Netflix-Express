@@ -3,7 +3,7 @@ const router = express.Router();
 const movies = require('../collection/movies')
 
 
-router.get('/movie', (req, res) => {
+router.get('/', (req, res) => {
    
     const getMovie = valor => {
         const callback = pelicula => {
@@ -21,13 +21,13 @@ router.get('/movie', (req, res) => {
     };
 });
 
-router.get('/movie/:id', (req, res) => {
+router.get('/:id', (req, res) => {
     res.json({
        data : movies[req.params.id]
     });
 });
 
-router.post('/movie', (req, res) => {
+router.post('/', (req, res) => {
     const newMovie = {
         name: req.body.name,
         genre: req.body.genre
@@ -36,7 +36,7 @@ router.post('/movie', (req, res) => {
     res.json(movies);
 });
 
-router.put('/movie/:id', (req, res) => {
+router.put('/:id', (req, res) => {
     const found = movies.find(movie => movie.id === parseInt(req.params.id));
 
     if(found){
@@ -51,7 +51,7 @@ router.put('/movie/:id', (req, res) => {
     }
 });
 
-router.delete('/movie/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     const found = movies.some(movie => movie.id === parseInt(req.params.id));
     if(found){
         let num = req.params.id;
