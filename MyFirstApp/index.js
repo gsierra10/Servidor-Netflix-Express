@@ -7,11 +7,13 @@ app.listen(3000,() => console.log('La API esta levantada en el puerto 3000'));
 
 app.get('/movie', (req, res) => {
    
-    const getMovie = (valor) => {
-        const callback = pelicula => pelicula.includes(valor);
-        return movies.filter(callback)
+    const getMovie = valor => {
+        const callback = pelicula => {
+            return pelicula.name.includes(valor);
+        };
+        return movies.filter(callback);
     };
-
+    
     let resultado = getMovie(req.query.name);
 
     console.log('result of getMovie -> ',resultado)
@@ -39,14 +41,14 @@ app.post('/movie', (req, res) => {
 });
 
 app.put('/movie/:id', (req, res) => {
-    const found = movies.some(movie => movie.id === parseInt(req.params.id));
+    const found = movies.find(movie => movie.id === parseInt(req.params.id));
 
     if(found){
         const updateMovie = req.body;
         movies.forEach(movie =>{
             if(movie.id === parseInt(req.params.id)){
                 movie.name = updateMovie.name ? updateMovie.name : movie.name;
-
+                movie.genre = updateMovie.genre ? updateMovie.genre : movie.genre;
                 res.json({ msg : 'Pelicula Corregida', movie})
             }
         });
