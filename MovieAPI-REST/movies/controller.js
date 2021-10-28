@@ -1,36 +1,31 @@
 const express = require('express');
-const MovieSchema = require('./model');
+const Movie = require('./model');
 const router = express.Router();
-const movies = require('./model')
 
 
-router.get('/', (req, res) => {
-   
-    const getMovie = valor => {
-        const callback = pelicula => {
-            return pelicula.name.includes(valor);
-        };
-        return movies.filter(callback);
-    };
-    
-    let resultado = getMovie(req.query.name);
-    let result = getMovie(req.query.genre)
+module.exports.getMovies = async (req, res) => {
+    const query = {};
+    if (req.query.title) {
+        query.title = req.query.title;
+    }
+    if (req.query.duration) {
+        query.duration = req.query.duration;
+    }
+    if (req.query.genero) {
+        query.genero = req.query.genero;
+    }
 
-    if(result.length > 0){
-        res.json({ pelicula : resultado})
-    } else {
-        res.status(400).send('query not found');
-    };
-});
+    const data = await Movie.find(query);
+    res.json(data);
+};
 
-router.get('/:id', (req, res) => {
-    res.json({
-       data : movies[req.params.id]
-    });
-});
+module.exports.getMovie = async (req, res) => {
+    const data = await Movie.find({_id: req.params.id});
+    res.json(data);
+};
 
 module.exports.createMovie = async (req, res) => {
-    const newMovie = new MovieSchema(req.body);
+    const newMovie = new Movie(req.body);
     await newMovie.save();
     res.json(newMovie);
 };
