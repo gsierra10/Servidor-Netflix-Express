@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const routesMovies = require('./movies/controller');
+const routesMovies = require('./movies/router');
 const mongoose = require('mongoose')
 
 mongoose.connect('mongodb://localhost:27017/Localhost',{

@@ -1,6 +1,7 @@
 const express = require('express');
+const MovieSchema = require('./model');
 const router = express.Router();
-const movies = require('./movies')
+const movies = require('./model')
 
 
 router.get('/', (req, res) => {
@@ -28,14 +29,11 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
-    const newMovie = {
-        name: req.body.name,
-        genre: req.body.genre
-    }
-    movies.push(newMovie);
-    res.json(movies);
-});
+module.exports.createMovie = async (req, res) => {
+    const newMovie = new MovieSchema(req.body);
+    await newMovie.save();
+    res.json(newMovie);
+};
 
 router.put('/:id', (req, res) => {
     const found = movies.find(movie => movie.id === parseInt(req.params.id));
@@ -60,5 +58,3 @@ router.delete('/:id', (req, res) => {
         res.json({ msg: 'Movie deleted', movies});
     }
 });
-
-module.exports = router;
