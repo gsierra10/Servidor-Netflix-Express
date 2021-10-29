@@ -4,9 +4,18 @@ const routesMovies = require('./movies/router');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
-const token = jwt.sign({ usuario: 'gustavo'}, 'shhhhh')
+const token = jwt.sign({ usuario: 'gustavo'}, 'shhhhh');
+console.log(token);
 
-console.log(token)
+try {
+    const decoded = jwt.verify(token, 'shhhhh');
+    console.log(decoded);    
+} catch (error) {
+    res.json({ msg: 'token invalido'})
+}
+
+
+
 
 mongoose.connect('mongodb://localhost:27017/Localhost',{
     useNewUrlParser: true,
