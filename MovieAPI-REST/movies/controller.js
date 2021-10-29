@@ -30,26 +30,26 @@ module.exports.createMovie = async (req, res) => {
     res.json(newMovie);
 };
 
-router.put('/:id', (req, res) => {
+module.exports.changeMovie = (req, res) => {
     const found = movies.find(movie => movie.id === parseInt(req.params.id));
 
     if(found){
         const updateMovie = req.body;
-        movies.forEach(movie =>{
-            if(movie.id === parseInt(req.params.id)){
-                movie.name = updateMovie.name ? updateMovie.name : movie.name;
-                movie.genre = updateMovie.genre ? updateMovie.genre : movie.genre;
-                res.json({ msg : 'Pelicula Corregida', movie})
+        Movie.forEach(Movie =>{
+            if(Movie.id === parseInt(req.params.id)){
+                Movie.name = updateMovie.title ? updateMovie.title : Movie.title;
+                Movie.genero = updateMovie.genero ? updateMovie.genero : Movie.genero;
+                res.json({ msg : 'Pelicula Corregida', Movie})
             }
         });
     }
-});
+};
 
-router.delete('/:id', (req, res) => {
-    const found = movies.some(movie => movie.id === parseInt(req.params.id));
+module.exports.deleteMovie = (req, res) => {
+    const found = Movie.some(movie => Movie.id === parseInt(req.params.id));
     if(found){
         let num = req.params.id;
-        movies.splice(num, 1)
-        res.json({ msg: 'Movie deleted', movies});
+        Movie.splice(num, 1)
+        res.json({ msg: 'Movie deleted', Movie});
     }
-});
+};
