@@ -15,7 +15,7 @@ module.exports.getMovies = async (req, res) => {
         query.genero = req.query.genero;
     }
 
-    const data = await Movie.find(query);
+    const data = await Movie.find({ title: { $regex: new RegExp(req.query.title, 'i') } });
     res.json(data);
 };
 
@@ -46,7 +46,7 @@ module.exports.changeMovie = (req, res) => {
 };
 
 module.exports.deleteMovie = (req, res) => {
-    const found = Movie.some(movie => Movie.id === parseInt(req.params.id));
+    const found = Movie.some(Movie => Movie.id === parseInt(req.params.id));
     if(found){
         let num = req.params.id;
         Movie.splice(num, 1)

@@ -1,7 +1,12 @@
 const express = require('express');
 const app = express();
 const routesMovies = require('./movies/router');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+
+const token = jwt.sign({ usuario: 'gustavo'}, 'shhhhh')
+
+console.log(token)
 
 mongoose.connect('mongodb://localhost:27017/Localhost',{
     useNewUrlParser: true,
@@ -15,3 +20,5 @@ app.listen(3000,() => console.log('La API esta levantada en el puerto 3000'));
 
 
 app.use('/movie', routesMovies)
+
+
