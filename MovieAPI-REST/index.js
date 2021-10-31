@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const routesMovies = require('./movies/router');
+const routesMembers = require ('./members/router');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
@@ -28,6 +29,6 @@ app.use(express.json());
 app.listen(3000,() => console.log('La API esta levantada en el puerto 3000'));
 
 
-app.use('/movie', routesMovies)
-
+app.use('/movie', routesMovies);
+app.use('/members', routesMembers);
 
