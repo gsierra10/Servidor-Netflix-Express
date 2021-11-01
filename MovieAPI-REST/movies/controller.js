@@ -1,7 +1,5 @@
 const express = require('express');
 const Movie = require('./model');
-const router = express.Router();
-
 
 module.exports.getMovies = async (req, res) => {
     const query = {};
