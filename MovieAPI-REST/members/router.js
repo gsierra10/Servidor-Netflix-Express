@@ -1,11 +1,11 @@
 const router = require('express').Router();
 const controller = require ('./controller');
 
-//router.get('/:id', controller.getMember);
-//router.get('/', controller.getMembers);
+router.get('/:id', controller.getMember);
+router.get('/', controller.getMembers);
 router.post('/', controller.createMember);
 //router.post('/login', controller.loginMember);
-//router.put('/:id', controller.updateMember);
-//router.delete('/:id', controller.deleteMember);
+router.put('/:id', controller.changeMember);
+router.delete('/:id', controller.deleteMember);
 
 module.exports = router;

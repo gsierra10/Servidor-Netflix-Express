@@ -5,11 +5,11 @@ const routesMembers = require ('./members/router');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
-const token = jwt.sign({ usuario: 'gustavo'}, 'shhhhh');
+const token = jwt.sign({ usuario: 'gustavo'}, '1234');
 console.log(token);
 
 try {
-    const decoded = jwt.verify(token, 'shhhhh');
+    const decoded = jwt.verify(token, '1234');
     console.log(decoded);    
 } catch (error) {
     res.json({ msg: 'token invalido'})
