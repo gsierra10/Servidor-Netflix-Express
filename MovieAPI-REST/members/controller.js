@@ -36,13 +36,13 @@ module.exports.changeMember = async(req, res) => {
 module.exports.loginMembers = async(req, res) => {
     if (!req.body.email || !req.body.password) {
         res.json({
-            message: "invalid member or password"
+            msg: "login incorrecto"
         }, 400);
     } else {
         const member = await Members.findOne({ email: req.body.email });
         if (!member) {
             res.json({
-                message: "invalid member or password"
+                message: "login incorrecto"
             }, 400);
         } else {
             try {
@@ -57,13 +57,13 @@ module.exports.loginMembers = async(req, res) => {
                     res.json(token);
                 } else {
                     res.json({
-                        message: "invalid member or password"
+                        msg: "login incorrecto"
                     }, 400);
                 }
             } catch (error) {
                 console.error(error);
                 res.json({
-                    message: error.message
+                    msg: error.msg
                 }, 500);
             }
         }
