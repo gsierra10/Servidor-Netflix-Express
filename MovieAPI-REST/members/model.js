@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const Members = new mongoose.Schema({
     name: { type: String, required: true, ref: 'Movie' },
-    role: { type: String, required: true },
+    role: { type: String, required: true, default: 'member' },
     password: { type: String, required: true },
     email: { type: String, required: true }
 })
