@@ -10,7 +10,7 @@ module.exports.getMembers = async(req, res) => {
         });
     } else {
         res.json({
-            members: await User.find()
+            members: await Members.find()
         });
     }
 };
@@ -27,14 +27,51 @@ module.exports.getMember = async(req, res) => res.json({
 
 module.exports.changeMember = async(req, res) => {
     let data = req.body;
-    const member = await User.findByIdAndUpdate(req.params.id, data);
+    const member = await Members.findByIdAndUpdate(req.params.id, data);
     res.json({
-        member: await User.findById(req.params.id)
+        member: await Members.findById(req.params.id)
     });
 };
 
+module.exports.loginMembers = async(req, res) => {
+    if (!req.body.email || !req.body.password) {
+        res.json({
+            message: "invalid member or password"
+        }, 400);
+    } else {
+        const member = await Members.findOne({ email: req.body.email });
+        if (!member) {
+            res.json({
+                message: "invalid member or password"
+            }, 400);
+        } else {
+            try {
+                const validated = bcrypt.compareSync(req.body.password, member.password);
+                if (validated) {
+                    const token = jwt.sign({
+                        _id: member._id,
+                        role: member.role
+                    }, process.env.PRIVATE_KEY, {
+                        expiresIn: '5h'
+                    });
+                    res.json(token);
+                } else {
+                    res.json({
+                        message: "invalid member or password"
+                    }, 400);
+                }
+            } catch (error) {
+                console.error(error);
+                res.json({
+                    message: error.message
+                }, 500);
+            }
+        }
+    }
+}
+
 module.exports.deleteMember = async(req, res) => {
-    const member = await User.findByIdAndDelete(req.params.id)
+    const member = await Members.findByIdAndDelete(req.params.id)
     res.json({
         delete: member
     });
