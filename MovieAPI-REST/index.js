@@ -3,20 +3,17 @@ const app = express();
 const routesMovies = require('./movies/router');
 const routesMembers = require ('./members/router');
 const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
 
-const token = jwt.sign({ usuario: 'gustavo'}, '1234');
-console.log(token);
+//const token = jwt.sign({ usuario: 'gustavo'}, '1234');
+//console.log(token);
 
-try {
-    const decoded = jwt.verify(token, '1234');
-    console.log(decoded);    
-} catch (error) {
-    res.json({ msg: 'token invalido'})
-}
-
-
-
+//try {
+//    const decoded = jwt.verify(token, '1234');
+//    console.log(decoded);    
+//} catch (error) {
+//    res.json({ msg: 'token invalido'})
+//}
 
 mongoose.connect('mongodb://localhost:27017/Localhost',{
     useNewUrlParser: true,

@@ -1,4 +1,3 @@
-const express = require('express');
 const Movie = require('./model');
 
 module.exports.getMovies = async (req, res) => {
@@ -28,26 +27,47 @@ module.exports.createMovie = async (req, res) => {
     res.json(newMovie);
 };
 
-module.exports.changeMovie = (req, res) => {
-    const found = movies.find(movie => movie.id === parseInt(req.params.id));
-
-    if(found){
-        const updateMovie = req.body;
-        Movie.forEach(Movie =>{
-            if(Movie.id === parseInt(req.params.id)){
-                Movie.name = updateMovie.title ? updateMovie.title : Movie.title;
-                Movie.genero = updateMovie.genero ? updateMovie.genero : Movie.genero;
-                res.json({ msg : 'Pelicula Corregida', Movie})
-            }
-        });
+module.exports.changeMovie = async(req, res) => {
+    try {
+        const movie = await Movie.findById(req.params.id);
+        if (movie) {
+            const movieUpdate = await Movie.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            res.json(movieUpdate);
+        } else {
+            res.json({
+                msg: 'pelicula no encontrada'
+            }, 404);
+        }
+    } catch (error) {
+        console.error(error);
+        if (error.name == "error de validacion") {
+            res.json({
+                menssage: error.message
+            }, 400);
+        } else {
+            res.json({
+                message: error.message
+            }, 500);
+        }
     }
 };
 
-module.exports.deleteMovie = (req, res) => {
-    const found = Movie.some(Movie => Movie.id === parseInt(req.params.id));
-    if(found){
-        let num = req.params.id;
-        Movie.splice(num, 1)
-        res.json({ msg: 'Movie deleted', Movie});
+module.exports.deleteMovie = async(req, res) => {
+    try {
+        const movie = await Movie.findById(req.params.id)
+        if (movie) {
+            const movie = await Movie.findByIdAndDelete(req.params.id);
+            res.json({
+                message: 'pelicula borrada'
+            });
+        } else {
+            res.json({
+                message: 'pelicula no encontrada'
+            }, 404);
+        }
+    } catch (error) {
+        res.json({
+            message: error.message
+        }, 500);
     }
 };
