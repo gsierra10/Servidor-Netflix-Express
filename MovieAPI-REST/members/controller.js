@@ -34,40 +34,45 @@ module.exports.changeMember = async(req, res) => {
 };
 
 module.exports.loginMembers = async(req, res) => {
-    if (!req.body.email || !req.body.password) {
-        res.json({
-            msg: "login incorrecto"
-        }, 400);
-    } else {
-        const member = await Members.findOne({ email: req.body.email });
-        if (!member) {
-            res.json({
-                message: "login incorrecto"
-            }, 400);
-        } else {
-            try {
-                const validated = bcrypt.compareSync(req.body.password, member.password);
-                if (validated) {
-                    const token = jwt.sign({
-                        _id: member._id,
-                        role: member.role
-                    }, process.env.PRIVATE_KEY, {
-                        expiresIn: '5h'
-                    });
-                    res.json(token);
-                } else {
-                    res.json({
-                        msg: "login incorrecto"
-                    }, 400);
+    let body = req.body;
+
+    Members.findOne({ email: body.email }, (erro, usuarioDB) => {
+        if(erro){
+            return res.status(500).json({
+                ok: false,
+                err: erro
+            });
+        };
+
+        if(!usuarioDB){
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    msg: "Usuario o contraseña incorrecta"
                 }
-            } catch (error) {
-                console.error(error);
-                res.json({
-                    msg: error.msg
-                }, 500);
-            }
+            })
         }
-    }
+
+        if (! bcrypt.compareSync(body.password, usuarioDB.password)){
+            return res.status(400).json({
+               ok: false,
+               err: {
+                 message: "Usuario o contraseña incorrectos"
+               }
+            });
+         }
+
+         let token = jwt.sign({
+            usuario: usuarioDB,
+         }, process.env.SEED_AUTENTICACION, {
+         expiresIn: process.env.CADUCIDAD_TOKEN
+     })
+         res.json({
+         ok: true,
+         usuario: usuarioDB,
+         token,
+     })
+    });
 }
 
 module.exports.deleteMember = async(req, res) => {
